@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trend Analizleri</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Navbar Ayarları */
+/* Navbar Ayarları */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #6c63ff;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.navbar ul li a:hover {
+    background-color: #5753d1;
+}
+
+.navbar ul li a.active {
+    background-color: #4b47b2;
+    font-weight: bold;
+}
+
+/* Veri Çek Butonu */
+.fetch-data-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: auto; /* Sağ hizalama için */
+}
+
+.fetch-data-btn:hover {
+    background-color: #218838;
+}
+
+
+        /* Trend Analizleri İçeriği */
+        .trend-section {
+            margin-top: 80px; /* Navbar'dan sonra içerik aşağı kaydırıldı */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .trend-section h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .trend-section p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Tablolar Ayarları */
+        .tables-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .table-container {
+            width: 45%;
+            text-align: center;
+        }
+
+        .table-container h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #6c63ff;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        @media (max-width: 768px) {
+            .tables-container {
+                flex-direction: column;
+            }
+            .table-container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">İkinci El Araç Listesi</div>
+        <ul>
+            <li><a href="http://127.0.0.1:8000/" class="active">Anasayfa</a></li>
+            <li><a href="{% url 'trend_analysis' %}">Trend Analizleri</a></li>
+        </ul>
+        <button class="fetch-data-btn">Veri Çek</button>
+    </nav>
+
+    <!-- Trend Analizleri İçeriği -->
+    <div class="trend-section">
+        <h1>Trend Analizleri</h1>
+        <p>Bu sayfada araç verileri üzerine yapılan analizleri görüntüleyebilirsiniz.</p>
+    </div>
+
+    <!-- Tablolar -->
+    <div class="tables-container">
+        <!-- Ortalama Fiyatlar Tablosu -->
+        <div class="table-container">
+            <h2>Marka Başına Ortalama Fiyatlar</h2>
+            <table>
+                <tr>
+                    <th>Marka</th>
+                    <th>Ortalama Fiyat (TL)</th>
+                </tr>
+                {% for row in average_prices %}
+                <tr>
+                    <td>{{ row.Marka }}</td>
+                    <td>{{ row.Ortalama_Fiyat }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- Popüler Markalar Tablosu -->
+        <div class="table-container">
+            <h2>En Popüler Markalar</h2>
+            <table>
+                <tr>
+                    <th>Marka</th>
+                    <th>Sayısı</th>
+                </tr>
+                {% for row in popular_brands %}
+                <tr>
+                    <td>{{ row.Marka }}</td>
+                    <td>{{ row.Sayısı }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

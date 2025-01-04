@@ -1,0 +1,27 @@
+<!-- scraping.html -->
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Araba Verileri</title>
+</head>
+<body>
+    <h1>Araba Verileri</h1>
+
+    {% if cars %}
+        <ul>
+            {% for car in cars %}
+                <li>
+                    <strong>Marka:</strong> {{ car.brand }} <br>
+                    <strong>Model:</strong> {{ car.model }} <br>
+                    <!-- Diğer özellikleri buraya ekleyin -->
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Veri bulunamadı.</p>
+    {% endif %}
+</body>
+</html>
