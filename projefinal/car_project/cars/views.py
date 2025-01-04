@@ -6,9 +6,63 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from cars.scraper import get_car_data
 import pandas as pd
+import joblib
+from sklearn.preprocessing import StandardScaler
 
+def predict_price(request):
+    prediction = None
+    if request.method == 'POST':
+        # Kullanıcıdan alınan veriler
+        marka = request.POST.get('marka')
+        model = request.POST.get('model')
+        yil = request.POST.get('yil')
+        renk = request.POST.get('renk')
+        km = request.POST.get('km')
+        yakit = request.POST.get('yakit')
+        vites = request.POST.get('vites')
 
+        # Modeli, scaler'ı ve diğer dosyaları yükle
+        model_path = 'C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\lasso_price_model.pkl'
+        scaler_path = 'C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\scaler.pkl'
+        columns_path = 'C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\model_columns.pkl'
 
+        model = joblib.load(model_path)
+        scaler = joblib.load(scaler_path)
+        model_columns = joblib.load(columns_path)
+
+        # Kullanıcıdan alınan veriyi DataFrame'e dönüştür
+        input_data = pd.DataFrame({
+            'Marka': [marka],
+            'Model': [model],
+            'Yıl': [int(yil)],
+            'Renk': [renk],
+            'KM': [int(km)],
+            'Yakıt Türü': [yakit],
+            'Vites Türü': [vites],
+            'Şehir': [''] * 1,
+            'Kaza Raporu': [''] * 1,
+            'Araç Durumu': [''] * 1,
+            'Takas Durumu': [''] * 1,
+            'Çekiş': [''] * 1,
+            'Motor Hacmi': [0] * 1,
+            'Motor Gücü': [0] * 1,
+            'Kasa Tipi': [''] * 1,
+            'Kimden': [''] * 1
+        })
+
+        # Kategorik verileri sayısallaştırma
+        input_data = pd.get_dummies(input_data)
+
+        # Modelde bulunan kolonları sıfır ile doldur
+        input_data = input_data.reindex(columns=model_columns, fill_value=0)
+
+        # Veriyi standartlaştırma
+        input_data_scaled = scaler.transform(input_data)
+
+        # Tahmin yap
+        prediction = model.predict(input_data_scaled)[0]
+
+    return render(request, 'cars/predict.html', {'prediction': prediction})
 def get_models(request):
     marka = request.GET.get('marka')
     if marka:
