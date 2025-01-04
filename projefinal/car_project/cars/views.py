@@ -1,14 +1,11 @@
-from pyexpat import model
-from django.shortcuts import render
+from django.shortcuts import  render
 from .models import Car
-import requests
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 from cars.scraper import get_car_data
 import pandas as pd
 import joblib
-from sklearn.preprocessing import StandardScaler
 
+#Tahminleme modeli
 def predict_price(request):
     prediction = None
     if request.method == 'POST':
@@ -63,6 +60,8 @@ def predict_price(request):
         prediction = model.predict(input_data_scaled)[0]
 
     return render(request, 'cars/predict.html', {'prediction': prediction})
+
+#Marka seçildikten sonra modelleri getir.
 def get_models(request):
     marka = request.GET.get('marka')
     if marka:
@@ -70,19 +69,16 @@ def get_models(request):
         return JsonResponse({'models': list(models)})
     return JsonResponse({'models': []})
 
-def fetch_data(request):
-    # Örnek veri çekme (Arabam.com'dan gerçek veri çekimi burada yapılabilir)
-    data = {"status": "success", "message": "Veri çekildi!"}
-    return JsonResponse(data)
-
+#Trend.analysis.html isteği getirir
 def trend_analysis(request):
     return render(request, '/trend_analysis.html')
 
+#Scraping.html
 def scraping(request):
     car_data = get_car_data()  # Verileri scraping fonksiyonundan alıyoruz
     return render(request, 'cars/scraping.html', {'cars': car_data})  # Verileri şablona gönderiyoruz
 
-
+#Anasayfada verileri getir
 def home(request):
     marka = request.GET.get('marka')
     model = request.GET.get('model')
@@ -160,6 +156,7 @@ def home(request):
 
     return render(request, 'cars/home.html', {'cars': cars})
 
+#Trend analizi sayfasında trendleri tablolaştır
 def trend_analysis(request):
 
     # Excel dosyasını okuyun

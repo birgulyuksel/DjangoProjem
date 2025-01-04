@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import fetch_data
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -8,5 +9,4 @@ urlpatterns = [
     path('fetch-data/', views.fetch_data, name='fetch_data'),
     path('trend-analysis/', views.trend_analysis, name='trend_analysis'),
     path('scraping/', views.scraping, name='scraping'),
-    
 ]

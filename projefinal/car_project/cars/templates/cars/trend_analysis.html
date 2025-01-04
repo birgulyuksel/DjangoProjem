@@ -1,68 +1,71 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Trend Analizleri</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-         body {
+        body {
             margin: 0;
             padding: 0;
             font-family: 'Roboto', sans-serif;
             background-color: #f7f7f7;
-         }
-    /* Navbar Ayarları */
-    .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    background: linear-gradient(90deg, #6c63ff, #4b47b2);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 30px;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
-}
+        }
 
-.navbar .logo {
-    font-size: 22px;
-    font-weight: bold;
-    position: absolute; left: 30px;
-}
+        /* Navbar Ayarları */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: linear-gradient(90deg, #6c63ff, #4b47b2);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 30px;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+        }
 
-.navbar ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    padding: 0;
-    margin: 0;
-}
+        .navbar .logo {
+            font-size: 22px;
+            font-weight: bold;
+            position: absolute;
+            left: 30px;
+        }
 
-.navbar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    padding: 10px 15px;
-    border-radius: 5px;
-}
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+        }
 
-.navbar ul li a:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
 
-.navbar ul li a.active {
-    background: #4b47b2;
-    font-weight: bold;
-}
+        .navbar ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar ul li a.active {
+            background: #4b47b2;
+            font-weight: bold;
+        }
 
         .trend-section {
             margin-top: 90px;
@@ -95,7 +98,8 @@
             font-size: 14px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -121,11 +125,13 @@
                 height: auto;
                 padding: 15px;
             }
+
             .navbar ul {
                 flex-direction: column;
                 align-items: center;
                 gap: 10px;
             }
+
             .table-container {
                 width: 100%;
                 padding: 15px;
@@ -133,18 +139,16 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="logo">İkinci El Araç Listesi</div>
         <ul>
             <li><a href="http://127.0.0.1:8000/" class="active">Anasayfa</a></li>
             <li><a href="{% url 'trend_analysis' %}">Trend Analizleri</a></li>
-            <li><a href="{% url 'predict_price' %}">Tahmin Et</a></li> <!-- Yeni bağlantı burada -->
+            <li><a href="{% url 'predict_price' %}">Tahmin Et</a></li> 
         </ul>
-    
     </nav>
-    
-
 
     <!-- Trend Analizleri İçeriği -->
     <div class="trend-section">
@@ -168,7 +172,7 @@
                 {% endfor %}
             </table>
         </div>
-    
+
         <!-- En Çok Araba Satılan Şehirler -->
         <div class="table-container">
             <h2>En Çok Araba Satılan Şehirler</h2>
@@ -185,7 +189,7 @@
                 {% endfor %}
             </table>
         </div>
-    
+
         <!-- En Çok Tercih Edilen Renkler -->
         <div class="table-container">
             <h2>En Çok Tercih Edilen Renkler</h2>
@@ -202,7 +206,7 @@
                 {% endfor %}
             </table>
         </div>
-    
+
         <!-- En Çok Tercih Edilen Markalar -->
         <div class="table-container">
             <h2>En Çok Tercih Edilen Markalar</h2>
@@ -219,7 +223,7 @@
                 {% endfor %}
             </table>
         </div>
-    
+
         <!-- En Çok Tercih Edilen Araç Durumları -->
         <!-- En Eski Arabalar -->
         <div class="table-container">
@@ -240,7 +244,6 @@
             </table>
         </div>
 
-    
         <!-- En Yeni Arabalar -->
         <div class="table-container">
             <h2>En Yeni Arabalar</h2>
@@ -260,7 +263,7 @@
             </table>
         </div>
 
-    
+
         <!-- En Yüksek Kilometreye Sahip Arabalar -->
         <div class="table-container">
             <h2>En Yüksek Kilometreye Sahip Arabalar</h2>
@@ -280,7 +283,7 @@
             </table>
         </div>
 
-    
+
         <!-- En Düşük Kilometreye Sahip Arabalar -->
         <div class="table-container">
             <h2>En Düşük Kilometreye Sahip Arabalar</h2>
@@ -319,7 +322,7 @@
             </table>
         </div>
 
-                <!-- En Çok Tercih Edilen Vites Türleri -->
+        <!-- En Çok Tercih Edilen Vites Türleri -->
         <div class="table-container">
             <h2>En Çok Tercih Edilen Vites Türleri</h2>
             <table>
@@ -336,7 +339,7 @@
             </table>
         </div>
 
-                <!-- En Çok Tercih Edilen Araç Durumları -->
+        <!-- En Çok Tercih Edilen Araç Durumları -->
         <div class="table-container">
             <h2>En Çok Tercih Edilen Araç Durumları</h2>
             <table>
@@ -353,7 +356,7 @@
             </table>
         </div>
 
-                <!-- En Çok Tercih Edilen Kasa Tipleri -->
+        <!-- En Çok Tercih Edilen Kasa Tipleri -->
         <div class="table-container">
             <h2>En Çok Tercih Edilen Kasa Tipleri</h2>
             <table>
@@ -369,34 +372,6 @@
                 {% endfor %}
             </table>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
-
-    
-
-
 </body>
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,55 +16,56 @@
             background-color: #f7f7f7;
         }
 
-/* Navbar Ayarları */
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    background: linear-gradient(90deg, #6c63ff, #4b47b2);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 30px;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
-}
+        /* Navbar Ayarları */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: linear-gradient(90deg, #6c63ff, #4b47b2);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 30px;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+        }
 
-.navbar .logo {
-    font-size: 22px;
-    font-weight: bold;
-    position: absolute; left: 30px;
-}
+        .navbar .logo {
+            font-size: 22px;
+            font-weight: bold;
+            position: absolute;
+            left: 30px;
+        }
 
-.navbar ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    padding: 0;
-    margin: 0;
-}
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+        }
 
-.navbar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    padding: 10px 15px;
-    border-radius: 5px;
-}
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
 
-.navbar ul li a:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
+        .navbar ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
 
-.navbar ul li a.active {
-    background: #4b47b2;
-    font-weight: bold;
-}
+        .navbar ul li a.active {
+            background: #4b47b2;
+            font-weight: bold;
+        }
 
         .trend-section {
             margin-top: 90px;
@@ -96,7 +98,8 @@
             font-size: 14px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -116,18 +119,20 @@
             background-color: #f1f1f1;
         }
 
-@media (max-width: 768px) {
+        @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
                 height: auto;
                 padding: 15px;
             }
+
             .navbar ul {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
             }
         }
+
         .predict-section {
             margin-top: 90px;
             padding: 40px 30px;
@@ -154,7 +159,8 @@
             color: #333;
         }
 
-        .form-group input, .form-group select {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px;
             border-radius: 8px;
@@ -164,7 +170,8 @@
             transition: border 0.3s ease;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             border-color: #6c63ff;
         }
 
@@ -199,11 +206,13 @@
                 height: auto;
                 padding: 15px;
             }
+
             .navbar ul {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
             }
+
             .predict-section {
                 width: 100%;
                 padding: 30px 20px;
@@ -211,6 +220,7 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="logo">İkinci El Araç Listesi</div>
@@ -268,10 +278,11 @@
         </form>
 
         {% if prediction %}
-            <div class="prediction-result">
-                <p>Tahmin Edilen Fiyat: <strong>{{ prediction }} TL</strong></p>
-            </div>
+        <div class="prediction-result">
+            <p>Tahmin Edilen Fiyat: <strong>{{ prediction }} TL</strong></p>
+        </div>
         {% endif %}
     </div>
 </body>
+
 </html>
