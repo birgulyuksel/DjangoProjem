@@ -7,81 +7,61 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         /* Navbar Ayarları */
-/* Navbar Ayarları */
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background-color: #6c63ff;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #6c63ff;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-.navbar .logo {
-    font-size: 20px;
-    font-weight: bold;
-}
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
 
-.navbar ul {
-    list-style: none;
-    display: flex;
-    gap: 15px;
-    padding: 0;
-    margin: 0;
-}
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            padding: 0;
+            margin: 0;
+        }
 
-.navbar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s;
-    padding: 8px 12px;
-    border-radius: 4px;
-}
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
 
-.navbar ul li a:hover {
-    background-color: #5753d1;
-}
+        .navbar ul li a:hover {
+            background-color: #5753d1;
+        }
 
-.navbar ul li a.active {
-    background-color: #4b47b2;
-    font-weight: bold;
-}
-
-/* Veri Çek Butonu */
-.fetch-data-btn {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-left: auto; /* Sağ hizalama için */
-}
-
-.fetch-data-btn:hover {
-    background-color: #218838;
-}
-
+        .navbar ul li a.active {
+            background-color: #4b47b2;
+            font-weight: bold;
+        }
 
         /* Trend Analizleri İçeriği */
         .trend-section {
-            margin-top: 80px; /* Navbar'dan sonra içerik aşağı kaydırıldı */
+            margin-top: 80px;
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
+            max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
             text-align: center;
@@ -92,28 +72,17 @@
             margin-bottom: 15px;
         }
 
-        .trend-section p {
-            font-size: 16px;
-            color: #555;
-        }
-
-        /* Tablolar Ayarları */
         .tables-container {
             display: flex;
-            justify-content: center;
+            flex-wrap: wrap;
+            justify-content: space-around;
             gap: 30px;
             margin-top: 30px;
-            flex-wrap: wrap;
         }
 
         .table-container {
             width: 45%;
             text-align: center;
-        }
-
-        .table-container h2 {
-            font-size: 18px;
-            margin-bottom: 10px;
         }
 
         table {
@@ -146,9 +115,6 @@
         }
 
         @media (max-width: 768px) {
-            .tables-container {
-                flex-direction: column;
-            }
             .table-container {
                 width: 90%;
             }
@@ -164,50 +130,259 @@
             <li><a href="http://127.0.0.1:8000/" class="active">Anasayfa</a></li>
             <li><a href="{% url 'trend_analysis' %}">Trend Analizleri</a></li>
         </ul>
-        <button class="fetch-data-btn">Veri Çek</button>
     </nav>
 
     <!-- Trend Analizleri İçeriği -->
     <div class="trend-section">
         <h1>Trend Analizleri</h1>
         <p>Bu sayfada araç verileri üzerine yapılan analizleri görüntüleyebilirsiniz.</p>
-    </div>
 
-    <!-- Tablolar -->
-    <div class="tables-container">
-        <!-- Ortalama Fiyatlar Tablosu -->
         <div class="table-container">
-            <h2>Marka Başına Ortalama Fiyatlar</h2>
+            <h2>Fiyatı En Yüksek Arabalar</h2>
             <table>
                 <tr>
                     <th>Marka</th>
-                    <th>Ortalama Fiyat (TL)</th>
+                    <th>Model</th>
+                    <th>Fiyat</th>
                 </tr>
-                {% for row in average_prices %}
+                {% for item in highest_prices %}
                 <tr>
-                    <td>{{ row.Marka }}</td>
-                    <td>{{ row.Ortalama_Fiyat }}</td>
+                    <td>{{ item.Marka }}</td>
+                    <td>{{ item.Model }}</td>
+                    <td>{{ item.Fiyat }}</td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
-
-        <!-- Popüler Markalar Tablosu -->
+    
+        <!-- En Çok Araba Satılan Şehirler -->
         <div class="table-container">
-            <h2>En Popüler Markalar</h2>
+            <h2>En Çok Araba Satılan Şehirler</h2>
+            <table>
+                <tr>
+                    <th>Şehir</th>
+                    <th>Satış Sayısı</th>
+                </tr>
+                {% for city, sales_count in top_cities.items %}
+                <tr>
+                    <td>{{ city }}</td>
+                    <td>{{ sales_count }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    
+        <!-- En Çok Tercih Edilen Renkler -->
+        <div class="table-container">
+            <h2>En Çok Tercih Edilen Renkler</h2>
+            <table>
+                <tr>
+                    <th>Renk</th>
+                    <th>Sayısı</th>
+                </tr>
+                {% for color, count in popular_colors.items %}
+                <tr>
+                    <td>{{ color }}</td>
+                    <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    
+        <!-- En Çok Tercih Edilen Markalar -->
+        <div class="table-container">
+            <h2>En Çok Tercih Edilen Markalar</h2>
             <table>
                 <tr>
                     <th>Marka</th>
                     <th>Sayısı</th>
                 </tr>
-                {% for row in popular_brands %}
+                {% for brand, count in popular_brands.items %}
                 <tr>
-                    <td>{{ row.Marka }}</td>
-                    <td>{{ row.Sayısı }}</td>
+                    <td>{{ brand }}</td>
+                    <td>{{ count }}</td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
+    
+        <!-- En Çok Tercih Edilen Araç Durumları -->
+        <!-- En Eski Arabalar -->
+        <div class="table-container">
+            <h2>En Eski Arabalar</h2>
+            <table>
+                <tr>
+                    <th>Marka</th>
+                    <th>Model</th>
+                    <th>Yıl</th>
+                </tr>
+                {% for car in oldest_cars %}
+                <tr>
+                    <td>{{ car.Marka }}</td>
+                    <td>{{ car.Model }}</td>
+                    <td>{{ car.Yıl }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    
+        <!-- En Yeni Arabalar -->
+        <div class="table-container">
+            <h2>En Yeni Arabalar</h2>
+            <table>
+                <tr>
+                    <th>Marka</th>
+                    <th>Model</th>
+                    <th>Yıl</th>
+                </tr>
+                {% for car in newest_cars %}
+                <tr>
+                    <td>{{ car.Marka }}</td>
+                    <td>{{ car.Model }}</td>
+                    <td>{{ car.Yıl }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    
+        <!-- En Yüksek Kilometreye Sahip Arabalar -->
+        <div class="table-container">
+            <h2>En Yüksek Kilometreye Sahip Arabalar</h2>
+            <table>
+                <tr>
+                    <th>Marka</th>
+                    <th>Model</th>
+                    <th>Kilometre</th>
+                </tr>
+                {% for car in highest_km %}
+                <tr>
+                    <td>{{ car.Marka }}</td>
+                    <td>{{ car.Model }}</td>
+                    <td>{{ car.KM }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    
+        <!-- En Düşük Kilometreye Sahip Arabalar -->
+        <div class="table-container">
+            <h2>En Düşük Kilometreye Sahip Arabalar</h2>
+            <table>
+                <tr>
+                    <th>Marka</th>
+                    <th>Model</th>
+                    <th>Kilometre</th>
+                </tr>
+                {% for car in lowest_km %}
+                <tr>
+                    <td>{{ car.Marka }}</td>
+                    <td>{{ car.Model }}</td>
+                    <td>{{ car.KM }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+
+
+        <!-- En Çok Tercih Edilen Yakıt Türleri -->
+        <div class="table-container">
+            <h2>En Çok Tercih Edilen Yakıt Türleri</h2>
+            <table>
+                <tr>
+                    <th>Yakıt Türü</th>
+                    <th>Sayısı</th>
+                </tr>
+                {% for fuel_type, count in popular_fuel_types.items %}
+                <tr>
+                    <td>{{ fuel_type }}</td>
+                    <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+                <!-- En Çok Tercih Edilen Vites Türleri -->
+        <div class="table-container">
+            <h2>En Çok Tercih Edilen Vites Türleri</h2>
+            <table>
+                <tr>
+                    <th>Vites Türü</th>
+                    <th>Sayısı</th>
+                </tr>
+                {% for transmission, count in popular_transmissions.items %}
+                <tr>
+                    <td>{{ transmission }}</td>
+                    <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+                <!-- En Çok Tercih Edilen Araç Durumları -->
+        <div class="table-container">
+            <h2>En Çok Tercih Edilen Araç Durumları</h2>
+            <table>
+                <tr>
+                    <th>Araç Durumu</th>
+                    <th>Sayısı</th>
+                </tr>
+                {% for condition, count in top_conditions.items %}
+                <tr>
+                    <td>{{ condition }}</td>
+                    <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+                <!-- En Çok Tercih Edilen Kasa Tipleri -->
+        <div class="table-container">
+            <h2>En Çok Tercih Edilen Kasa Tipleri</h2>
+            <table>
+                <tr>
+                    <th>Kasa Tipi</th>
+                    <th>Sayısı</th>
+                </tr>
+                {% for body_type, count in popular_body_types.items %}
+                <tr>
+                    <td>{{ body_type }}</td>
+                    <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
+
+    
+
+
 </body>
 </html>

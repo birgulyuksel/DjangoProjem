@@ -107,25 +107,31 @@ def home(request):
     return render(request, 'cars/home.html', {'cars': cars})
 
 def trend_analysis(request):
+
     # Excel dosyasını okuyun
-    file_path = "C:\\Users\\birgu\\Desktop\\projefinal\\car_project\\Araba_Verileri_Duzenli_pivot.xlsx"  # Dosya yolunu doğru girin
-    df = pd.read_excel(file_path)
+    file_path = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Araba_Verileri_Duzenli_pivot.xlsx"
+    sheet_name = "Sayfa1"
+    df = pd.read_excel(file_path, sheet_name=sheet_name)
 
-    # Renk analizini yap
-    if 'Renk' in df.columns:
-        top_colors = df['Renk'].value_counts().head(5).to_dict()
-    else:
-        top_colors = {}
+    # İstatistik Analizleri
+    stats = {
+    "highest_prices": df.nlargest(5, "Fiyat")[["Marka", "Model", "Fiyat"]].to_dict(orient="records"),
+    "top_cities": df["Şehir"].value_counts().head(5).to_dict(),
+    "popular_colors": df["Renk"].value_counts().head(5).to_dict(),
+    "popular_brands": df["Marka"].value_counts().head(5).to_dict(),
+    "oldest_cars": df.nsmallest(5, "Yıl")[["Marka", "Model", "Yıl"]].to_dict(orient="records"),
+    "newest_cars": df.nlargest(5, "Yıl")[["Marka", "Model", "Yıl"]].to_dict(orient="records"),
+    "highest_km": df.nlargest(5, "KM")[["Marka", "Model", "KM"]].to_dict(orient="records"),
+    "lowest_km": df.nsmallest(5, "KM")[["Marka", "Model", "KM"]].to_dict(orient="records"),
+    "avg_prices_by_city": df.groupby("Şehir")["Fiyat"].mean().nlargest(5).to_dict(),
+    "popular_fuel_types": df["Yakıt Türü"].value_counts().head(5).to_dict(),
+    "popular_transmissions": df["Vites Türü"].value_counts().head(5).to_dict(),
+    "top_conditions": df["Araç Durumu"].value_counts().head(5).to_dict(),
+    "popular_body_types": df["Kasa Tipi"].value_counts().head(5).to_dict(),
+    }
 
-    # Araç Durumu analizini yap
-    if 'Araç Durumu' in df.columns:
-        top_conditions = df['Araç Durumu'].value_counts().head(5).to_dict()
-    else:
-        top_conditions = {}
 
-    return render(request, 'cars/trend_analysis.html', {
-        'top_colors': top_colors,
-        'top_conditions': top_conditions,
-    })
+    return render(request, "cars/trend_analysis.html", stats)
+
 
 
