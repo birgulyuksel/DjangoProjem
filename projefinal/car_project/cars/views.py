@@ -13,54 +13,39 @@ from cars.management.commands.collect_data import fetch_data_and_save
 #Toplanan veriyi excelden siteye gönderir
 def collected_data(request):
     # Excel dosyasını oku
-    file_path = 'C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx'
+    file_path = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
     df = pd.read_excel(file_path)
 
     # Veriyi template'e gönder
     data = df.to_dict(orient='records')  # Veriyi dict formatında gönderiyoruz
     return render(request, 'cars/collected_data.html', {'data': data})
 
-#Veri kaydedilmesi
-def fetch_data(request):
-    try:
-        fetch_data_and_save()
-        return JsonResponse({'message': 'Veri başarıyla kaydedildi.'})
-    except Exception as e:
-        return JsonResponse({'message': f'Bir hata oluştu: {str(e)}'})
+# Veri çekme fonksiyonu
+# Varsayılan veri çekme limiti
+FETCH_LIMIT = 10
 
-#Veri çekme işlemi
 def start_data_collection(request):
-    try:
-        call_command('collect_data')  # Yönetim komutunu çalıştır
-        return JsonResponse({"message": "Veri çekme işlemi başlatıldı."})
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+    if request.method == 'GET':
+        try:
+            # Veri çekme işlemi
+            if FETCH_LIMIT:
+                car_data = fetch_data_and_save(limit=FETCH_LIMIT)
+            else:
+                car_data = fetch_data_and_save()  # Tüm veriyi çek
 
-#Ekrana yazdırma
-def car_list(request):
-    cars = Car.objects.all()
+            # Veriyi Excel'e kaydetme
+            df = pd.DataFrame(car_data)
+            excel_file = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
+            df.to_excel(excel_file, index=False)
 
-    # Filtreleme için GET parametrelerini alın
-    marka = request.GET.get('marka')
-    model = request.GET.get('model')
-    yil = request.GET.get('yil')
-    fiyat_min = request.GET.get('fiyat_min')
-    fiyat_max = request.GET.get('fiyat_max')
-
-    # Filtreleme
-    if marka:
-        cars = cars.filter(marka__icontains=marka)
-    if model:
-        cars = cars.filter(model__icontains=model)
-    if yil:
-        cars = cars.filter(yil=yil)
-    if fiyat_min:
-        cars = cars.filter(fiyat__gte=fiyat_min)
-    if fiyat_max:
-        cars = cars.filter(fiyat__lte=fiyat_max)
-
-    return render(request, 'car_list.html', {'cars': cars})
-
+            # Mesaj döndürme
+            return JsonResponse({
+                'status': 'success',
+                'message': f'{len(car_data)} araç başarıyla çekildi ve kaydedildi.',
+            })
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Hata: {str(e)}'}, status=500)
+    return JsonResponse({'status': 'error', 'message': 'Sadece GET istekleri destekleniyor.'}, status=405)
 
 #Tahminleme modeli
 def predict_price(request):
@@ -212,6 +197,99 @@ def home(request):
             pass  # Hatalı değer girildiyse filtreyi uygulama
 
     return render(request, 'cars/home.html', {'cars': cars})
+
+def collected_data(request):
+    # Excel dosyasını oku
+    file_path = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
+    df = pd.read_excel(file_path)
+
+    # Veriyi template'e gönder
+    data = df.to_dict(orient='records')  # Veriyi dict formatında gönderiyoruz
+    return render(request, 'cars/home.html', {'data': data})
+
+def collected_data(request):
+    # Excel dosyasını oku
+    file_path = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
+    df = pd.read_excel(file_path)
+
+    # Filtreleme için GET parametrelerini al
+    marka = request.GET.get('marka')
+    renk = request.GET.get('renk')
+    model = request.GET.get('model')
+    yil = request.GET.get('yil')
+    km_min = request.GET.get('km_min')
+    km_max = request.GET.get('km_max')
+    fiyat_min = request.GET.get('fiyat_min')
+    fiyat_max = request.GET.get('fiyat_max')
+    kaza_raporu = request.GET.get('kaza_raporu')
+    yakit_turu = request.GET.get('yakit_turu')
+    vites_turu = request.GET.get('vites_turu')
+    arac_durumu = request.GET.get('arac_durumu')
+    takas_durumu = request.GET.get('takas_durumu')
+    cekis = request.GET.get('cekis')
+    motor_gucu = request.GET.get('motor_gucu')
+    motor_hacmi = request.GET.get('motor_hacmi')
+
+    # Filtreleme işlemleri
+    if marka:
+        df = df[df['marka'].str.contains(marka, case=False, na=False)]
+    if renk:
+        df = df[df['renk'].str.contains(renk, case=False, na=False)]
+    if model:
+        df = df[df['model'].str.contains(model, case=False, na=False)]
+    if yil:
+        if yil == '2000once':
+            df = df[df['yil'] < 2000]
+        elif yil == '2000_2005arasi':
+            df = df[(df['yil'] >= 2000) & (df['yil'] <= 2005)]
+        elif yil == '2005_2010arasi':
+            df = df[(df['yil'] >= 2005) & (df['yil'] <= 2010)]
+        elif yil == '2010_2020arasi':
+            df = df[(df['yil'] >= 2010) & (df['yil'] <= 2020)]
+        elif yil == '2020sonra':
+            df = df[df['yil'] > 2020]
+    if km_min or km_max:
+        if km_min:
+            df = df[df['km'] >= int(km_min)]
+        if km_max:
+            df = df[df['km'] <= int(km_max)]
+    if fiyat_min or fiyat_max:
+        if fiyat_min:
+            df = df[df['fiyat'] >= float(fiyat_min)]
+        if fiyat_max:
+            df = df[df['fiyat'] <= float(fiyat_max)]
+    if kaza_raporu:
+        df = df[df['kaza_raporu'].str.contains(kaza_raporu, case=False, na=False)]
+    if yakit_turu:
+        df = df[df['yakit_turu'].str.contains(yakit_turu, case=False, na=False)]
+    if vites_turu:
+        df = df[df['vites_turu'].str.contains(vites_turu, case=False, na=False)]
+    if arac_durumu:
+        df = df[df['arac_durumu'].str.contains(arac_durumu, case=False, na=False)]
+    if takas_durumu:
+        df = df[df['takas_durumu'].str.contains(takas_durumu, case=False, na=False)]
+    if cekis:
+        df = df[df['cekis'].str.contains(cekis, case=False, na=False)]
+    
+    # Motor gücü aralığını temizleyip filtrelemek
+    if motor_gucu:
+        try:
+            motor_gucu = float(motor_gucu)  # motor gücünü sayıya dönüştürme
+            df = df[df['motor_gucu'] >= motor_gucu]
+        except ValueError:
+            pass  # Hatalı değer girildiyse filtreyi uygulama
+
+    if motor_hacmi:
+        try:
+            motor_hacmi = float(motor_hacmi)  # motor hacmini sayıya dönüştürme
+            df = df[df['motor_hacmi'] >= motor_hacmi]
+        except ValueError:
+            pass  # Hatalı değer girildiyse filtreyi uygulama
+
+    # Filtrelenmiş veriyi dict formatında gönder
+    data = df.to_dict(orient='records')
+
+    return render(request, 'cars/collected_data.html', {'data': data})
 
 #Trend analizi sayfasında trendleri tablolaştır
 def trend_analysis(request):

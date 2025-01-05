@@ -12,3 +12,4 @@ def export_to_excel():
     cars = Car.objects.all().values()
     df = pd.DataFrame(cars)
     df.to_excel('cars.xlsx', index=False)
+    

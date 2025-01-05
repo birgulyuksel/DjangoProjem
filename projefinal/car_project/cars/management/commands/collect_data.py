@@ -1,10 +1,12 @@
 import time
+from django.conf import settings
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
 from cars.models import Car
+
 
 def clean_km_value(km):
     """KM değerini temizler ve sayısal formata dönüştürür."""
@@ -17,10 +19,11 @@ def clean_price_value(price):
 def save_to_excel(data):
     """Çekilen verileri Excel dosyasına kaydeder."""
     df = pd.DataFrame(data)
-    df.to_excel('C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx', index=False, engine='openpyxl')
+    excel_file = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
+    df.to_excel(excel_file, index=False)
     print("Veriler Excel dosyasına kaydedildi.")
-
-def fetch_data_and_save():
+    
+def fetch_data_and_save(limit=10):
     """Arabam.com'dan veri çeker, veritabanına ve Excel dosyasına kaydeder."""
     options = uc.ChromeOptions()
     options.add_argument("--start-maximized")
@@ -43,8 +46,9 @@ def fetch_data_and_save():
 
         index = 0
         page_number = 1
+        count = 0  # Çekilen araç sayısını takip etmek için
 
-        while True:
+        while count < limit:
             car_links = WebDriverWait(driver, 15).until(
                 EC.presence_of_all_elements_located((By.XPATH, '//tbody/tr/td[3]/a'))
             )
@@ -159,6 +163,7 @@ def fetch_data_and_save():
                     motor_gucu=engine_power,
                 )
                 car.save()
+                count += 1  # Çekilen araç sayısını artır
 
             except Exception as e:
                 print(f"Bilgi alınamadı: {e}")

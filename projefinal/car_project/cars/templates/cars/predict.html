@@ -276,10 +276,11 @@
                 <button type="submit">Tahmin Et</button>
             </div>
         </form>
+        {% load humanize %}
 
         {% if prediction %}
         <div class="prediction-result">
-            <p>Tahmin Edilen Fiyat: <strong>{{ prediction }} TL</strong></p>
+            <p>Tahmin Edilen Fiyat: <strong> {{ prediction|floatformat:2|intcomma }} TL</strong></p>
         </div>
         {% endif %}
     </div>
