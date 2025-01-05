@@ -1,9 +1,66 @@
+import decimal
 from django.shortcuts import  render
+import openpyxl
 from .models import Car
 from django.http import JsonResponse
 from cars.scraper import get_car_data
 import pandas as pd
 import joblib
+from django.core.management import call_command
+from cars.management.commands.collect_data import fetch_data_and_save
+
+
+#Toplanan veriyi excelden siteye gönderir
+def collected_data(request):
+    # Excel dosyasını oku
+    file_path = 'C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx'
+    df = pd.read_excel(file_path)
+
+    # Veriyi template'e gönder
+    data = df.to_dict(orient='records')  # Veriyi dict formatında gönderiyoruz
+    return render(request, 'cars/collected_data.html', {'data': data})
+
+#Veri kaydedilmesi
+def fetch_data(request):
+    try:
+        fetch_data_and_save()
+        return JsonResponse({'message': 'Veri başarıyla kaydedildi.'})
+    except Exception as e:
+        return JsonResponse({'message': f'Bir hata oluştu: {str(e)}'})
+
+#Veri çekme işlemi
+def start_data_collection(request):
+    try:
+        call_command('collect_data')  # Yönetim komutunu çalıştır
+        return JsonResponse({"message": "Veri çekme işlemi başlatıldı."})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+#Ekrana yazdırma
+def car_list(request):
+    cars = Car.objects.all()
+
+    # Filtreleme için GET parametrelerini alın
+    marka = request.GET.get('marka')
+    model = request.GET.get('model')
+    yil = request.GET.get('yil')
+    fiyat_min = request.GET.get('fiyat_min')
+    fiyat_max = request.GET.get('fiyat_max')
+
+    # Filtreleme
+    if marka:
+        cars = cars.filter(marka__icontains=marka)
+    if model:
+        cars = cars.filter(model__icontains=model)
+    if yil:
+        cars = cars.filter(yil=yil)
+    if fiyat_min:
+        cars = cars.filter(fiyat__gte=fiyat_min)
+    if fiyat_max:
+        cars = cars.filter(fiyat__lte=fiyat_max)
+
+    return render(request, 'car_list.html', {'cars': cars})
+
 
 #Tahminleme modeli
 def predict_price(request):

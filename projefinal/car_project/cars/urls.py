@@ -1,12 +1,16 @@
 from django.urls import path
 from . import views
-from .views import fetch_data
+
+from cars import views
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('predict/', views.predict_price, name='predict_price'),
     path('get-models/', views.get_models, name='get_models'),
-    path('fetch-data/', views.fetch_data, name='fetch_data'),
     path('trend-analysis/', views.trend_analysis, name='trend_analysis'),
     path('scraping/', views.scraping, name='scraping'),
+    path('fetch-data/', views.fetch_data, name='fetch_data'),
+    path('collected-data/', views.collected_data, name='collected_data'),
+    path('start-data-collection/', views.start_data_collection, name='start_data_collection'),
 ]
+

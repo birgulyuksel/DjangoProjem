@@ -13,11 +13,24 @@
             <li><a href="{% url 'predict_price' %}">Tahmin Et</a></li> <!-- Yeni bağlantı burada -->
         </ul>
         <!-- Veri çekme butonunun olduğu form -->
-        <form method="POST" action="{% url 'fetch_data' %}">
-            {% csrf_token %}
-            <button type="submit" class="fetch-data-btn">Veri Çek</button>
-        </form>
+        <a href="{% url 'fetch_data' %}" class="fetch-data-btn" id="fetch-data-btn">Veri Çek</a>
     </nav>
+    <script>
+        document.getElementById('fetch-data-btn').addEventListener('click', () => {
+            fetch('/start-data-collection/')
+                .then(response => response.json())
+                .then(data => {
+                    const logDiv = document.getElementById('data-log');
+                    if (data.message) {
+                        logDiv.innerHTML = `<p>${data.message}</p>`;
+                    } else {
+                        logDiv.innerHTML = `<p>Hata: ${data.error}</p>`;
+                    }
+                })
+                .catch(error => console.error('Hata:', error));
+        });
+    </script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         /* Navbar Ayarları */
