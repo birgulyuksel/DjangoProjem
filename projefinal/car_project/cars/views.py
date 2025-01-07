@@ -23,15 +23,14 @@ def collected_data(request):
 # Veri çekme fonksiyonu
 # Varsayılan veri çekme limiti
 FETCH_LIMIT = 10
-
 def start_data_collection(request):
     if request.method == 'GET':
         try:
             # Veri çekme işlemi
-            if FETCH_LIMIT:
-                car_data = fetch_data_and_save(limit=FETCH_LIMIT)
-            else:
-                car_data = fetch_data_and_save()  # Tüm veriyi çek
+            car_data = fetch_data_and_save(limit=FETCH_LIMIT)
+
+            if not car_data:
+                return JsonResponse({'status': 'error', 'message': 'Hiç veri çekilemedi.'}, status=500)
 
             # Veriyi Excel'e kaydetme
             df = pd.DataFrame(car_data)
@@ -46,6 +45,7 @@ def start_data_collection(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': f'Hata: {str(e)}'}, status=500)
     return JsonResponse({'status': 'error', 'message': 'Sadece GET istekleri destekleniyor.'}, status=405)
+
 
 #Tahminleme modeli
 def predict_price(request):
@@ -318,6 +318,5 @@ def trend_analysis(request):
 
 
     return render(request, "cars/trend_analysis.html", stats)
-
 
 

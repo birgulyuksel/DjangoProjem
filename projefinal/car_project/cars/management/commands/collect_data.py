@@ -18,6 +18,10 @@ def clean_price_value(price):
 
 def save_to_excel(data):
     """Çekilen verileri Excel dosyasına kaydeder."""
+    if not data:
+        print("Kaydedilecek veri bulunamadı.")
+        return
+    
     df = pd.DataFrame(data)
     excel_file = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
     df.to_excel(excel_file, index=False)
@@ -177,4 +181,4 @@ def fetch_data_and_save(limit=10):
 
     # Verileri Excel dosyasına kaydet
         save_to_excel(data)
-
+        return data
