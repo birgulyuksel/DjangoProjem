@@ -1,6 +1,6 @@
 from django.db import models
 
-
+#Araba modelleri tanımlandı
 class Car(models.Model):
     marka = models.CharField(max_length=50)
     model = models.CharField(max_length=50)

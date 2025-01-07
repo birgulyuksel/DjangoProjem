@@ -1,5 +1,4 @@
 import time
-from django.conf import settings
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -26,8 +25,9 @@ def save_to_excel(data):
     excel_file = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
     df.to_excel(excel_file, index=False)
     print("Veriler Excel dosyasına kaydedildi.")
-    
-def fetch_data_and_save(limit=10):
+
+#Limit default olarak 5'e ayarlandı buradan değiştirebilirsiniz.(1)
+def fetch_data_and_save(limit=5):
     """Arabam.com'dan veri çeker, veritabanına ve Excel dosyasına kaydeder."""
     options = uc.ChromeOptions()
     options.add_argument("--start-maximized")

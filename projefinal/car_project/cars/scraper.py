@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
+#Araba verileri çekilir
 def get_car_data():
     # Tarayıcı başlatma
     options = uc.ChromeOptions()

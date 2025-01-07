@@ -1,6 +1,4 @@
-import decimal
 from django.shortcuts import  render
-import openpyxl
 from .models import Car
 from django.http import JsonResponse
 from cars.scraper import get_car_data
@@ -21,8 +19,8 @@ def collected_data(request):
     return render(request, 'cars/collected_data.html', {'data': data})
 
 # Veri çekme fonksiyonu
-# Varsayılan veri çekme limiti
-FETCH_LIMIT = 10
+# Varsayılan veri çekme limiti 5 olarak ayarlandı, buradan değiştirebilirsiniz.
+FETCH_LIMIT = 5
 def start_data_collection(request):
     if request.method == 'GET':
         try:

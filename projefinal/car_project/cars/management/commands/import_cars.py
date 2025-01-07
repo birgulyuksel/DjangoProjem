@@ -2,6 +2,7 @@ import pandas as pd
 from django.core.management.base import BaseCommand
 from cars.models import Car
 
+#Araba verileri excelden çekilir
 class Command(BaseCommand):
     help = 'Import car data from Excel'
 
