@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from django.core.management.base import BaseCommand
 from cars.models import Car
@@ -7,7 +8,9 @@ class Command(BaseCommand):
     help = 'Import car data from Excel'
 
     def handle(self, *args, **kwargs):
-        df = pd.read_excel('C:\\Users\\birgu\\car_project\\Araba_Verileri_Duzenli.xlsx')
+        user_profile = os.getenv("USERPROFILE")  # Windows kullanıcı profilini al
+        file_path = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "Araba_Verileri_Duzenli.xlsx")
+        df = pd.read_excel(file_path)
         for _, row in df.iterrows():
             Car.objects.create(
                 marka=row['Marka'],
@@ -27,4 +30,4 @@ class Command(BaseCommand):
                 motor_gucu=row['Motor Gücü'],
                 kasa_tipi=row['Kasa Tipi'],
                 kimden=row['Kimden']
-            )
+            )

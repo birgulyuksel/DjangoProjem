@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import  render
 from .models import Car
 from django.http import JsonResponse
@@ -11,7 +12,8 @@ from cars.management.commands.collect_data import fetch_data_and_save
 #Toplanan veriyi excelden siteye gönderir
 def collected_data(request):
     # Excel dosyasını oku
-    file_path = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
+    user_profile = os.getenv("USERPROFILE")  # Windows kullanıcı profilini al
+    file_path = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "Arac_Verileri_Yeni.xlsx")
     df = pd.read_excel(file_path)
 
     # Veriyi template'e gönder
@@ -32,7 +34,8 @@ def start_data_collection(request):
 
             # Veriyi Excel'e kaydetme
             df = pd.DataFrame(car_data)
-            excel_file = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
+            user_profile = os.getenv("USERPROFILE")  # Windows kullanıcı profilini al
+            excel_file = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "Arac_Verileri_Yeni.xlsx")
             df.to_excel(excel_file, index=False)
 
             # Mesaj döndürme
@@ -59,9 +62,11 @@ def predict_price(request):
         vites = request.POST.get('vites')
 
         # Modeli, scaler'ı ve diğer dosyaları yükle
-        model_path = 'C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\lasso_price_model.pkl'
-        scaler_path = 'C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\scaler.pkl'
-        columns_path = 'C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\model_columns.pkl'
+        user_profile = os.getenv("USERPROFILE")  # Windows kullanıcı profilini al
+        model_path = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "lasso_price_model.pkl")
+        scaler_path = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "scaler.pkl")
+        columns_path = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "model_columns.pkl")
+        
 
         model = joblib.load(model_path)
         scaler = joblib.load(scaler_path)
@@ -148,11 +153,11 @@ def home(request):
         if yil == '2000once':
             cars = cars.filter(yil__lt=2000)
         elif yil == '2000_2005arasi':
-            cars = cars.filter(yil__gte=2000, yil__lte=2005)
+            cars = cars.filter(yil_gte=2000, yil_lte=2005)
         elif yil == '2005_2010arasi':
-            cars = cars.filter(yil__gte=2005, yil__lte=2010)
+            cars = cars.filter(yil_gte=2005, yil_lte=2010)
         elif yil == '2010_2020arasi':
-            cars = cars.filter(yil__gte=2010, yil__lte=2020)
+            cars = cars.filter(yil_gte=2010, yil_lte=2020)
         elif yil == '2020sonra':
             cars = cars.filter(yil__gt=2020)
     if km_min or km_max:
@@ -198,7 +203,8 @@ def home(request):
 
 def collected_data(request):
     # Excel dosyasını oku
-    file_path = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
+    user_profile = os.getenv("USERPROFILE")  # Windows kullanıcı profilini al
+    file_path = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "Arac_Verileri_Yeni.xlsx")
     df = pd.read_excel(file_path)
 
     # Veriyi template'e gönder
@@ -207,7 +213,8 @@ def collected_data(request):
 
 def collected_data(request):
     # Excel dosyasını oku
-    file_path = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Arac_Verileri_Yeni.xlsx"
+    user_profile = os.getenv("USERPROFILE")  # Windows kullanıcı profilini al
+    file_path = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "Arac_Verileri_Yeni.xlsx")
     df = pd.read_excel(file_path)
 
     # Filtreleme için GET parametrelerini al
@@ -293,7 +300,8 @@ def collected_data(request):
 def trend_analysis(request):
 
     # Excel dosyasını okuyun
-    file_path = "C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Araba_Verileri_Duzenli_pivot.xlsx"
+    user_profile = os.getenv("USERPROFILE")  # Windows kullanıcı profilini al
+    file_path = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "Araba_Verileri_Duzenli_pivot.xlsx")
     sheet_name = "Sayfa1"
     df = pd.read_excel(file_path, sheet_name=sheet_name)
 
@@ -315,6 +323,4 @@ def trend_analysis(request):
     }
 
 
-    return render(request, "cars/trend_analysis.html", stats)
-
-
+    return render(request, "cars/trend_analysis.html", stats)

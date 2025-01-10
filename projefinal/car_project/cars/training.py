@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Lasso
@@ -5,7 +6,9 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 
 # Veriyi yükle
-data = pd.read_excel('C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Araba_Verileri_Duzenli.xlsx')
+user_profile = os.getenv("USERPROFILE")  # Windows kullanıcı profilini al
+excel_path = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "Araba_Verileri_Duzenli.xlsx")
+data = pd.read_excel(excel_path)
 
 # Özellikler ve hedef
 features = data[['Marka', 'Model', 'Yıl', 'KM', 'Şehir', 'Kaza Raporu', 'Renk', 'Yakıt Türü', 
