@@ -1,9 +1,12 @@
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 
 # Veriyi yükle
-data = pd.read_excel('C:\\Users\\birgu\\Desktop\\DjangoProjem\\projefinal\\car_project\\Araba_Verileri_Duzenli_pivot.xlsx')  # Excel dosyasının adını değiştir
+user_profile = os.getenv("USERPROFILE")  # Windows kullanıcı profilini al
+file_path = os.path.join(user_profile, "Desktop", "DjangoProjem", "projefinal", "car_project", "Araba_Verileri_Duzenli_pivot.xlsx")
+data = pd.read_excel(file_path)  # Excel dosyasının adını değiştir
 features = data[['Marka', 'Renk', 'KM']]
 target = data['Fiyat']
 
